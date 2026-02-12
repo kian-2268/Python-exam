@@ -1,64 +1,108 @@
 class Item:
-    def __init__(self, item_name, quantity, price):
-        self.item_name = item_name
-        self.quantity = quantity
-        self.price = price
-        self.items = []
+    def __init__(self):
+        # Dictionary to store items
+        self.inventory = {}
 
     def add_item(self):
-        self.items.append(self.item_name, self.quantity, self.price)
+        try:
+            name = input("Enter item name: ").strip()
+
+            if name in self.inventory:
+                print("Item already exists! Use update option instead.")
+                return
+
+            quantity = int(input("Enter quantity: "))
+            price = float(input("Enter price per item: "))
+
+            if quantity < 0 or price < 0:
+                print("Quantity and price must not be negative.")
+                return
+
+            self.inventory[name] = {
+                "quantity": quantity,
+                "price": price
+            }
+
+            print("Item added successfully!\n")
+
+        except ValueError:
+            print("Invalid input! Quantity must be an integer and price must be a number.\n")
 
     def update_quantity(self):
-        quantity = int(input("Enter updated quantity: "))
-        self.items[quantity] = quantity
+        try:
+            name = input("Enter item name to update: ").strip()
+
+            if name not in self.inventory:
+                print("Item not found!\n")
+                return
+
+            quantity = int(input("Enter new quantity: "))
+
+            if quantity < 0:
+                print("Quantity cannot be negative.\n")
+                return
+
+            self.inventory[name]["quantity"] = quantity
+            print("Quantity updated successfully!\n")
+
+        except ValueError:
+            print("Invalid input! Quantity must be an integer.\n")
 
     def display_items(self):
-        print("\nItems In The Inventory:")
-        for i in self.items in enumerate:
-            print(self.items[i])
-    
+        if not self.inventory:
+            print("Inventory is empty.\n")
+            return
+
+        print("\n------ INVENTORY LIST ------")
+        for name, details in self.inventory.items():
+            quantity = details["quantity"]
+            price = details["price"]
+            total_price = quantity * price
+
+            print(f"Item: {name}")
+            print(f"Quantity: {quantity}")
+            print(f"Price: {price}")
+            print(f"Total Value: {total_price}")
+            print("----------------------------")
+        print()
+
     def calculate_total_inventory_value(self):
-        result = self.quantity * self.price
-        print("Total inventory value: ", result)
-        self.items.append(result)
+        total_value = 0
 
-def Main():
-    try:
-        item_name = input("Enter item name: ")
-        try:
-            quantity = int(input("Enter quantity: "))
-            price = float(input("Enter price: "))
-        except ValueError:
-            print("Please enter numerical values only.")
+        for details in self.inventory.values():
+            total_value += details["quantity"] * details["price"]
 
-        item = Item(item_name, quantity, price)
+        print(f"\nTotal Inventory Value: {total_value}\n")
 
-        while True:
-            print("\nWelcome to Inventory Management System!")
-            print("Please choose an action: ")
-            print("[1] Add item")
-            print("[2] Update quantity")
-            print("[3] Display items")
-            print("[4] Calculate total inventory value")
-            print("[5] Exit")
 
-            choice = input("Please choose a number: ")
+# Main Program
+def main():
+    shop = Item()
 
-            if choice == "1":
-                item.add_item()
-            elif choice == "2":
-                item.update_quantity()
-            elif choice == "3":
-                item.display_items()
-            elif choice == "4":
-                item.calculate_total_inventory_value()
-            elif choice == "5":
-                print("Thank you for using our system! Have a nice day!")
-            else:
-                print("Invalid input. Please choose only from 1 to 5.")
+    while True:
+        print("=== INVENTORY MANAGEMENT SYSTEM ===")
+        print("1. Add Item")
+        print("2. Update Quantity")
+        print("3. Display Items")
+        print("4. Calculate Total Inventory Value")
+        print("5. Exit")
 
-    except Exception as e:
-        print("Error: ", e)
+        choice = input("Enter your choice (1-5): ")
+
+        if choice == "1":
+            shop.add_item()
+        elif choice == "2":
+            shop.update_quantity()
+        elif choice == "3":
+            shop.display_items()
+        elif choice == "4":
+            shop.calculate_total_inventory_value()
+        elif choice == "5":
+            print("Exiting program...")
+            break
+        else:
+            print("Invalid choice! Please select 1-5.\n")
+
 
 if __name__ == "__main__":
-    Main()
+    main()
